@@ -42,9 +42,6 @@ export default function App() {
             on a journey of the limitless exploration with
             Aora
           </Text>
-          {/* <Link href="/profile" className='text-white'>
-            Profile
-          </Link> */}
           <CustomButton 
             title="Countinue with Email"
             handlePress={()=> router.push('/sign-in')}
