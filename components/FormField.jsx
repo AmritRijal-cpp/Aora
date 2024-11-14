@@ -1,13 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { icons } from '../constants';
 
 const FormField = ({ title, value, handleTextChange, otherStyles, placeholder, ...props }) => {
    const [showPassword, setShowPassword] = useState(false);
-
    return (
       <View className={`space-y-2 ${otherStyles}`}>
-         <Text className="text-base text-gray-100 font-pmedium">
+         <Text className="text-base mb-2 text-gray-100 font-pmedium">
             {title}
          </Text>
 
