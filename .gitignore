@@ -16,6 +16,9 @@ web-build/
 *.key
 *.mobileprovision
 
+# Config folder
+lib/config.js
+
 # Metro
 .metro-health-check*
 

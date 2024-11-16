@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants';
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { Link } from 'expo-router';
+import { signIn } from '../../lib/appwrite';
 
 const SignIn = () => {
 
@@ -15,8 +16,20 @@ const SignIn = () => {
 
   const [isSubmiting, setIsSubmiting] = useState(false);
 
-  function submit() {
+  async function submit() {
+    if(!form.email || !form.password) {
+      Alert.alert("Error", "Please fill all the fields")
+    }
+    setIsSubmiting(true);
 
+     try {
+      await signIn(form.email, form.password);
+      router.replace('/home');
+     } catch (error) {
+      Alert.alert('Error', 'error during signin');
+     } finally {
+      setIsSubmiting(false);
+     }
   }
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -51,7 +64,7 @@ const SignIn = () => {
           />
           <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
-              Don't have account?
+              Don't have an account?
             </Text>
             <Link href="/sign-up" className='text-lg font-psemibold text-secondary'>Sign Up</Link>
           </View>
