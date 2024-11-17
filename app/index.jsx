@@ -6,8 +6,16 @@ import '../global.css';
 import { images } from '../constants';
 import CustomButton from '../components/CustomButton';
 import { useGlobalContext } from '../context/GlobalProvider';
+import { useEffect } from 'react';
 export default function App() {
-  const { loading, isLogged } = useGlobalContext();
+  const { loading, isLogged, user } = useGlobalContext();
+
+  // useEffect(()=>{
+  //   console.log("loading: " + loading);
+  //   console.log("isLogged: "+isLogged);
+  //   console.log("user: "+ user);
+    
+  // })
 
   if (!loading && isLogged) return <Redirect href="/home" />;
   return (
