@@ -16,12 +16,10 @@ const GlobalProvider = ({ children }) => {
         if (res) {
           setIsLogged(true);
           setUser(res);
-          console.log("if response after logging in");
           
         } else {
           setIsLogged(false);
           setUser(null);
-          console.log("else response during logging in");
           
         }
       })
