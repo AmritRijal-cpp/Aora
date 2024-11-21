@@ -1,12 +1,9 @@
-import { View, Text, Image, TouchableOpacity, Button } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { icons } from '../constants'
-import { useVideoPlayer, VideoView } from 'expo-video';
-import { useEvent } from 'expo';
 import { Video, ResizeMode } from 'expo-av';
 
-const videoSource =
-  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 
 const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avatar } } }) => {
@@ -14,6 +11,8 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
   useEffect(() => {
     if (play) {
       setTimeout(() => {
+        console.log(video);
+        
         console.log("Updated play:", play); // This will correctly log true
       }, 5000);
     }
@@ -52,11 +51,11 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
       </View>
       {play ? (
         <Video
-          source={{ uri: video }}
+          source={videoSource}
           className='h-60 w-full rounded-xl mt-3'
           useNativeControls
           shouldPlay
-          resizeMode={ResizeMode.COVER}
+          resizeMode={ResizeMode.CONTAIN}
           onPlaybackStatusUpdate={status => status.didJustFinish == true && setPlay(false)}
           onError={(error)=>console.log(error)}
         />

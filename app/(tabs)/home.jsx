@@ -1,5 +1,5 @@
 import { View, Text, FlatList, Image, RefreshControl, Alert } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 import { images } from '../../constants'
@@ -9,10 +9,6 @@ import EmptyState from '../../components/EmptyState'
 import { getAllPosts, getLatestPosts } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite';
 import VideoCard from '../../components/VideoCard'
-import { Video, ResizeMode } from 'expo-av'
-
-const videoSource =
-  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -74,18 +70,6 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-      <Video
-          source={{ uri: videoSource }}
-          className="relative flex justify-center items-center"
-          resizeMode={ResizeMode.COVER}
-          useNativeControls
-          shouldPlay
-          onPlaybackStatusUpdate={(status) => {
-            if (status.didJustFinish) {
-              setPlay(false);
-            }
-          }}
-        />
       <StatusBar style='light' backgroundColor='#161622' />
     </SafeAreaView>
   )

@@ -1,17 +1,13 @@
-import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { StyleSheet, View, Button } from 'react-native';
 
 const videoSource =
-  'https://player.vimeo.com/video/949616422?h=d60220d68d';
+  '"https://www.w3schools.com/html/mov_bbb.mp4"';
 export default function Create() {
   const player = useVideoPlayer(videoSource, player => {
     player.loop = true;
     player.play();
   });
-
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
-
   return (
     <View style={styles.contentContainer}>
       <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
