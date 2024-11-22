@@ -3,11 +3,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '../../components/FormField';
 import { useState } from 'react';
 import { ResizeMode, Video } from 'expo-av';
-import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 import { icons } from '../../constants';
 import CustomButton from '../../components/CustomButton'
+import { router } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import { createVideo } from '../../lib/appwrite';
+import { useVideoPlayer, VideoView } from 'expo-video';
 const Create = () => {
   const [uploading, setUploading] = useState(false);
+  const { user } = useGlobalContext();
   const [form, setForm] = useState({
     title: '',
     video: null,
@@ -15,28 +20,55 @@ const Create = () => {
     prompt: ''
   });
 
-  const openPicker = async (selectType) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: selectType === 'image' ?
-        ['image/*'] : ['video/*']
-    })
+  const player = useVideoPlayer(form.video?.uri || '', player=> {
+    player.pause();
+  })
 
-    if(!result.canceled) {
-      if(selectType==="image") {
-        setForm({...form, thumbnail: result.assets[0]});
-      } if(selectType==="video"){
-        setForm({...form, video: result.assets[0]});
+  const openPicker = async (selectType) => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      if (selectType === "image") {
+        setForm({ ...form, thumbnail: result.assets[0] });
+      } if (selectType === "video") {
+        setForm({ ...form, video: result.assets[0] });
         console.log(form.video);
-        
+
       }
     } else {
-      setTimeout(()=>{
+      setTimeout(() => {
         Alert.alert('Document Picked', JSON.stringify(result, null, 2))
       }, 100)
     }
   }
-  const submit = () => {
+  const submit = async () => {
+    if (!form.title || !form.video || !form.thumbnail || !form.prompt) {
+      return Alert.alert("Filds Empty", "Please fill all the fields");
+    }
+    setUploading(true)
+    try {
+      await createVideo({
+        ...form,
+        userId: user.$id
+      });
 
+      Alert.alert(("Success", "Post uploaded successfully"));
+      router.push("/home");
+    } catch (error) {
+      Alert.alert("Error", "catch error");
+    } finally {
+      setForm({
+        title: '',
+        video: null,
+        thumbnail: null,
+        prompt: ''
+      });
+      setUploading(false);
+    }
   }
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -60,12 +92,11 @@ const Create = () => {
             onPress={() => openPicker('video')}
           >
             {form.video ? (
-              <Video
-                source={{ uri: form.video.uri }}
-                className="w-full h-64 rounded-2xl"
-                useNativeControls
-                resizeMode={ResizeMode.COVER}
-                isLooping
+              <VideoView
+                player={useVideoPlayer}
+                allowsFullscreen={false}
+                allowsPictureInPicture={false}
+                className="w-[100%] h-64 rounded-2xl"
               />
             ) : (
               <View className="w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center">

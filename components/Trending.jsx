@@ -6,27 +6,22 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  View,
 } from "react-native";
 
 import { icons } from "../constants";
-
-const videoSource =
-  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
 
 const zoomIn = {
   0: {
     scale: 0.9,
   },
   1: {
-    scale: 1.1,
+    scale: 1,
   },
 };
 
 const zoomOut = {
   0: {
-    scale: 1.1,
+    scale: 1,
   },
   1: {
     scale: 0.9,
